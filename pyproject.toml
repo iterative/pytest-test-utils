@@ -1,0 +1,46 @@
+[build-system]
+requires = ["setuptools>=48", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.black]
+line-length = 79
+include = '\.pyi?$'
+exclude = '''
+/(
+    \.eggs
+  | \.git
+  | \.hg
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | _build
+  | buck-out
+  | build
+  | dist
+)/
+'''
+
+[tool.isort]
+profile = "black"
+line_length = 79
+
+[tool.mypy]
+# Error output
+show_column_numbers = true
+show_error_codes = true
+show_error_context = true
+show_traceback = true
+pretty = true
+check_untyped_defs = true
+strict = true
+warn_no_return = true
+warn_redundant_casts = true
+warn_unreachable = true
+files = ["pytest_test_utils"]
+
+[tool.pylint.message_control]
+enable = ["no-else-return"]
+disable = ["missing-function-docstring", "missing-module-docstring", "missing-class-docstring"]
+
+[tool.pytest.ini_options]
+testpaths = ["./tests.py"]
