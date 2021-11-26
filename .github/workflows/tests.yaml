@@ -14,3 +14,4 @@ jobs:
         python-version: ${{ matrix.python-version }}
     - run: pip install -U nox pip wheel
     - run: nox
+    - run: nox -s build
