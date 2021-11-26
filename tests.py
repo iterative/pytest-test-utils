@@ -51,3 +51,11 @@ def test_chdir(tmp_path: Path, tmp_dir: TmpDir) -> None:
         assert Path.cwd() == subdir
         assert Path.cwd() == tmp_path / "dir"
         assert Path.cwd() == tmp_dir / "dir"
+
+
+def test_cat(tmp_dir: TmpDir) -> None:
+    tmp_dir.gen({"dir": {"file": "lorem ipsum"}})
+
+    assert tmp_dir.cat() == {"dir": {"file": "lorem ipsum"}}
+    assert (tmp_dir / "dir").cat() == {"file": "lorem ipsum"}
+    assert (tmp_dir / "dir" / "file").cat() == "lorem ipsum"

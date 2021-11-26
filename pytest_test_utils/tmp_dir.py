@@ -33,3 +33,8 @@ class TmpDir(type(Path())):  # type: ignore
             yield
         finally:
             os.chdir(old)
+
+    def cat(self):
+        if self.is_dir():
+            return {p.name: p.cat() for p in self.iterdir()}
+        return self.read_text(encoding="utf-8")

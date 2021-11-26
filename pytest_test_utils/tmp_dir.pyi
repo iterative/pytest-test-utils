@@ -9,6 +9,8 @@ AnyStruct = Dict[AnyPath[T], Union[Text, Dict[AnyPath[T], Any]]]
 StrStruct = AnyStruct[str]
 BytesStruct = AnyStruct[bytes]
 
+CatStruct = Union[str, Dict[str, Union[str, Dict[str, Any]]]]
+
 class TmpDir(Path):
     @overload
     def gen(self, struct: AnyPath[T], text: Text = "") -> List[T]: ...
@@ -17,3 +19,4 @@ class TmpDir(Path):
     @overload
     def gen(self, struct: StrStruct, text: Text = "") -> List[str]: ...
     def chdir(self) -> ContextManager[None]: ...
+    def cat(self) -> CatStruct: ...
