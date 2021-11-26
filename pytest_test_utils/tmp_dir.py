@@ -1,6 +1,7 @@
 import os
 from contextlib import contextmanager
 from pathlib import Path
+from typing import Iterator
 
 
 class TmpDir(type(Path())):  # type: ignore
@@ -25,7 +26,7 @@ class TmpDir(type(Path())):  # type: ignore
         return list(struct.keys())
 
     @contextmanager
-    def chdir(self):
+    def chdir(self) -> Iterator[None]:
         old = os.getcwd()
         try:
             os.chdir(self)

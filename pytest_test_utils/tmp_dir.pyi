@@ -1,6 +1,6 @@
 import os
 from pathlib import Path
-from typing import Any, Dict, List, TypeVar, Union, overload
+from typing import Any, ContextManager, Dict, List, TypeVar, Union, overload
 
 T = TypeVar("T", str, bytes)
 Text = Union[str, bytes]
@@ -16,3 +16,4 @@ class TmpDir(Path):
     def gen(self, struct: BytesStruct, text: Text = "") -> List[bytes]: ...
     @overload
     def gen(self, struct: StrStruct, text: Text = "") -> List[str]: ...
+    def chdir(self) -> ContextManager[None]: ...
