@@ -1,7 +1,19 @@
 import os
 from pathlib import Path
 
-from pytest_test_utils import TmpDir
+import pytest
+
+from pytest_test_utils import ANY, TmpDir
+
+
+def test_any() -> None:
+    assert ANY(str) == "5"
+    assert ANY(str) != 5
+
+    with pytest.raises(AssertionError):
+        assert ANY(int) != 5
+    assert ANY(int) == 5
+    assert repr(ANY(int)) == "ANY(int)"
 
 
 def test_is_tmp_dir(tmp_dir: TmpDir) -> None:
