@@ -2,8 +2,14 @@ from pathlib import Path
 from typing import Iterator
 
 import pytest
+from pytest import TempPathFactory
 
-from .tmp_dir import TmpDir
+from . import TempDirFactory, TmpDir
+
+
+@pytest.fixture(scope="session")
+def tmp_dir_factory(tmp_path_factory: TempPathFactory) -> TempDirFactory:
+    return TempDirFactory(tmp_path_factory)
 
 
 @pytest.fixture

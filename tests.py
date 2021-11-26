@@ -4,6 +4,7 @@ from pathlib import Path
 import pytest
 
 from pytest_test_utils import ANY, TmpDir
+from pytest_test_utils.tmp_dir_factory import TempDirFactory
 
 
 def test_any() -> None:
@@ -71,3 +72,16 @@ def test_cat(tmp_dir: TmpDir) -> None:
     assert tmp_dir.cat() == {"dir": {"file": "lorem ipsum"}}
     assert (tmp_dir / "dir").cat() == {"file": "lorem ipsum"}
     assert (tmp_dir / "dir" / "file").cat() == "lorem ipsum"
+
+
+def test_tmp_dir_factory(tmp_dir_factory: TempDirFactory) -> None:
+    tmp_dir = tmp_dir_factory.mktemp("test-dir")
+    assert isinstance(tmp_dir, TmpDir)
+    assert isinstance(tmp_dir, os.PathLike)
+    assert isinstance(tmp_dir, Path)
+    assert "test-dir0" in tmp_dir.name
+
+    tmp_dir.gen({"foo": "foo"})
+    assert tmp_dir.cat() == {"foo": "foo"}
+
+    assert "test-dir1" in tmp_dir_factory.mktemp("test-dir").name
