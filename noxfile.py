@@ -11,8 +11,11 @@ locations = "pytest_test_utils", "tests.py"
 
 @nox.session(python=["3.7", "3.8", "3.9", "3.10"])
 def tests(session: nox.Session) -> None:
-    session.install("-e", ".[dev]")
-    session.run("pytest")
+    session.install(".[tests]")
+    # `pytest --cov` will start coverage after pytest
+    # so we need to use `coverage`.
+    session.run("coverage", "run", "-m", "pytest")
+    session.run("coverage", "report", "--show-missing", "--skip-covered")
 
 
 @nox.session
