@@ -5,7 +5,7 @@ import glob
 import nox
 
 nox.options.reuse_existing_virtualenvs = True
-nox.options.sessions = "lint", "tests"
+nox.options.sessions = "lint", "tests", "tests-pytest5"
 locations = "pytest_test_utils", "tests.py"
 
 
@@ -16,6 +16,13 @@ def tests(session: nox.Session) -> None:
     # so we need to use `coverage`.
     session.run("coverage", "run", "-m", "pytest")
     session.run("coverage", "report", "--show-missing", "--skip-covered")
+
+
+@nox.session(python=["3.7"], name="tests-pytest5")
+def tests_pytest5(session: nox.Session) -> None:
+    session.install(".[tests]")
+    session.install("pytest==5.0.0")
+    session.run("coverage", "run", "-m", "pytest", "tests.py")
 
 
 @nox.session

@@ -1,21 +1,21 @@
 from pathlib import Path
-from typing import Iterator, Type
+from typing import TYPE_CHECKING, Iterator, Type
 
 import pytest
-from pytest import TempPathFactory
 
 from . import TempDirFactory, TmpDir, matchers
 
+if TYPE_CHECKING:
+    from pytest import MonkeyPatch, TempPathFactory
+
 
 @pytest.fixture(scope="session")
-def tmp_dir_factory(tmp_path_factory: TempPathFactory) -> TempDirFactory:
+def tmp_dir_factory(tmp_path_factory: "TempPathFactory") -> TempDirFactory:
     return TempDirFactory(tmp_path_factory)
 
 
 @pytest.fixture
-def tmp_dir(
-    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
-) -> Iterator[TmpDir]:
+def tmp_dir(tmp_path: Path, monkeypatch: "MonkeyPatch") -> Iterator[TmpDir]:
     tmp = TmpDir(tmp_path)
     monkeypatch.chdir(tmp_path)
     yield tmp
