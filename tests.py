@@ -2,13 +2,16 @@ import os
 from datetime import datetime, timedelta
 from pathlib import Path
 from types import SimpleNamespace
-from typing import Type
+from typing import TYPE_CHECKING, Type
 
 import pytest
 
 from pytest_test_utils import TmpDir, matchers
 from pytest_test_utils.matchers import Matcher
 from pytest_test_utils.tmp_dir_factory import TempDirFactory
+
+if TYPE_CHECKING:
+    from pytest import TempPathFactory
 
 # pylint: disable=redefined-outer-name
 
@@ -81,7 +84,7 @@ def test_cat(tmp_dir: TmpDir) -> None:
 
 
 def test_tmp_dir_factory(
-    tmp_path_factory: pytest.TempPathFactory, tmp_dir_factory: TempDirFactory
+    tmp_path_factory: "TempPathFactory", tmp_dir_factory: TempDirFactory
 ) -> None:
     assert isinstance(tmp_dir_factory, TempDirFactory)
     tmp_dir = tmp_dir_factory.mktemp("test-dir")
