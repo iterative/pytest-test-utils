@@ -36,11 +36,15 @@ strict = true
 warn_no_return = true
 warn_redundant_casts = true
 warn_unreachable = true
-files = ["pytest_test_utils"]
+files = ["pytest_test_utils", "tests.py"]
+
+[[tool.mypy.overrides]]
+module = ["tests"]
+strict_equality = false
 
 [tool.pylint.message_control]
 enable = ["no-else-return"]
 disable = ["missing-function-docstring", "missing-module-docstring", "missing-class-docstring"]
 
 [tool.pytest.ini_options]
-testpaths = ["./tests.py"]
+testpaths = ["tests.py"]
