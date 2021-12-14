@@ -1,14 +1,17 @@
 import os
 from datetime import datetime, timedelta
 from pathlib import Path
+from time import perf_counter
 from types import SimpleNamespace
 from typing import TYPE_CHECKING, Type
+from unittest.mock import MagicMock
 
 import pytest
 
 from pytest_test_utils import TmpDir, matchers
 from pytest_test_utils.matchers import Matcher
 from pytest_test_utils.tmp_dir_factory import TempDirFactory
+from pytest_test_utils.waiters import TimedOutError, wait_until
 
 if TYPE_CHECKING:
     from pytest import TempPathFactory
@@ -266,3 +269,24 @@ def test_matcher_alias(  # pylint: disable=invalid-name
     M: Type[Matcher], matcher: Type[Matcher]
 ) -> None:
     assert matcher is M is Matcher
+
+
+def test_wait_until() -> None:
+    pred = MagicMock(side_effect=[False, False, True])
+
+    start = perf_counter()
+    assert wait_until(pred, 0.01, pause=0.0001)
+    assert perf_counter() == pytest.approx(start + 0.0002, rel=1e-3)
+    assert len(pred.call_args_list) == 3
+
+
+def test_wait_until_raises_timedouterror() -> None:
+    pred = MagicMock(return_value=False)
+
+    start = perf_counter()
+
+    with pytest.raises(TimedOutError):
+        wait_until(pred, 0.01, pause=0.0001)
+
+    assert perf_counter() == pytest.approx(start + 0.01, rel=1e-3)
+    assert len(pred.call_args_list) > 1
