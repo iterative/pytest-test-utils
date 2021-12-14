@@ -10,7 +10,6 @@ from typing import (
     Optional,
     Pattern,
     Tuple,
-    Type,
     Union,
 )
 
@@ -124,7 +123,7 @@ class any_of:
 class instance_of:
     def __init__(
         self,
-        expected_type: Union[Type[object], Tuple[Type[object], ...]],
+        expected_type: Union[Any, Tuple[Any, ...]],
     ) -> None:
         self.expected_type = expected_type
 
@@ -198,9 +197,7 @@ class Matcher(attrs):
         return any_of(*items)
 
     @staticmethod
-    def instance_of(
-        expected_type: Union[Type[object], Tuple[Type[object], ...]]
-    ) -> instance_of:
+    def instance_of(expected_type: Union[Any, Tuple[Any, ...]]) -> instance_of:
         return instance_of(expected_type)
 
     @staticmethod
