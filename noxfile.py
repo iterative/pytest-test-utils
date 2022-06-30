@@ -1,15 +1,16 @@
 """Automation using nox.
 """
 import glob
+import sys
 
 import nox
 
 nox.options.reuse_existing_virtualenvs = True
-nox.options.sessions = "lint", "tests", "tests-pytest5"
+nox.options.sessions = "lint", "tests", "compat"
 locations = "pytest_test_utils", "tests.py"
 
 
-@nox.session(python=["3.7", "3.8", "3.9", "3.10"])
+@nox.session(python=["3.7", "3.8", "3.9", "3.10", "3.11"])
 def tests(session: nox.Session) -> None:
     session.install(".[tests]")
     # `pytest --cov` will start coverage after pytest
@@ -18,10 +19,11 @@ def tests(session: nox.Session) -> None:
     session.run("coverage", "report", "--show-missing", "--skip-covered")
 
 
-@nox.session(python=["3.7"], name="tests-pytest5")
-def tests_pytest5(session: nox.Session) -> None:
+@nox.session(python=["3.7", "3.8"])
+@nox.parametrize("pytest", ["5", "6"])
+def compat(session: nox.Session, pytest: str) -> None:
     session.install(".[tests]")
-    session.install("pytest==5.0.0")
+    session.install(f"pytest=={pytest}")
     session.run("coverage", "run", "-m", "pytest", "tests.py")
 
 
@@ -37,6 +39,8 @@ def lint(session: nox.Session) -> None:
 
     session.run("pre-commit", "run", *args)
     session.run("python", "-m", "mypy")
+    if sys.version_info >= (3, 11):
+        return
     session.run("python", "-m", "pylint", *locations)
 
 
