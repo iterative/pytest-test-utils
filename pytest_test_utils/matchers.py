@@ -1,17 +1,8 @@
+import builtins
 import collections.abc
 import re
 from datetime import datetime
-from typing import (
-    TYPE_CHECKING,
-    Any,
-    AnyStr,
-    Dict,
-    Mapping,
-    Optional,
-    Pattern,
-    Tuple,
-    Union,
-)
+from typing import TYPE_CHECKING, Any, AnyStr, Pattern, Tuple, Union
 
 if TYPE_CHECKING:
     from _pytest.python_api import ApproxBase
@@ -54,24 +45,18 @@ class any:  # pylint: disable=redefined-builtin
         return True
 
 
-class dict:  # pylint: disable=redefined-builtin
+class dict(
+    builtins.dict  # type: ignore[type-arg]
+):  # pylint: disable=redefined-builtin
     """Special class to eq by matching only presented dict keys"""
 
-    def __init__(
-        self, d: Optional[Mapping[Any, Any]] = None, **keys: Any
-    ) -> None:
-        self.d: Dict[Any, Any] = {}
-        if d:
-            self.d.update(d)
-        self.d.update(keys)
-
     def __repr__(self) -> str:
-        inner = ", ".join(f"{k}={repr(v)}" for k, v in self.d.items())
+        inner = ", ".join(f"{k}={repr(v)}" for k, v in self.items())
         return f"dict({inner})"
 
     def __eq__(self, other: object) -> bool:
         assert isinstance(other, collections.abc.Mapping)
-        return all(other.get(name) == v for name, v in self.d.items())
+        return all(other.get(name) == v for name, v in self.items())
 
 
 class unordered:
@@ -170,6 +155,7 @@ class Matcher(attrs):
     """
 
     any = any()
+    dict = dict
 
     @staticmethod
     def attrs(**attribs: Any) -> attrs:
@@ -183,10 +169,6 @@ class Matcher(attrs):
         return regex(pattern, flags=flags)
 
     re = regex
-
-    @staticmethod
-    def dict(d: Optional[Mapping[Any, Any]] = None, **keys: Any) -> dict:
-        return dict(d=d, **keys)
 
     @staticmethod
     def unordered(*items: Any) -> unordered:

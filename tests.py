@@ -109,9 +109,7 @@ def test_matcher_repr(matcher: Type[Matcher]) -> None:
     assert repr(matcher.attrs(foo="foo")) == "attrs(foo='foo')"
     assert repr(matcher.any_of(3, 4)) == "any_of(3, 4)"
     assert (
-        repr(
-            matcher.dict(foo="foo", **{"bar": "bar"})  # type: ignore[arg-type]
-        )
+        repr(matcher.dict(foo="foo", **{"bar": "bar"}))
         == "dict(foo='foo', bar='bar')"
     )
     assert repr(matcher.instance_of(str)) == "instance_of(str)"
@@ -125,6 +123,9 @@ def test_matcher_repr(matcher: Type[Matcher]) -> None:
 
 
 def test_matcher_dict(matcher: Type[Matcher]) -> None:
+    # pytest needs len() to be there when there is no explanation
+    assert len(matcher.dict({"a": 1, "b": 2})) == 2
+
     actual = {"base_url": "url", "verify": "bundle", "timeout": 10}
     assert actual == matcher.dict(verify="bundle", timeout=10)
     assert actual == matcher.dict(actual, verify="bundle")
