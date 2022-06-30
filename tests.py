@@ -109,9 +109,7 @@ def test_matcher_repr(matcher: Type[Matcher]) -> None:
     assert repr(matcher.attrs(foo="foo")) == "attrs(foo='foo')"
     assert repr(matcher.any_of(3, 4)) == "any_of(3, 4)"
     assert (
-        repr(
-            matcher.dict(foo="foo", **{"bar": "bar"})  # type: ignore[arg-type]
-        )
+        repr(matcher.dict(foo="foo", **{"bar": "bar"}))
         == "dict(foo='foo', bar='bar')"
     )
     assert repr(matcher.instance_of(str)) == "instance_of(str)"

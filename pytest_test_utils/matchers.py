@@ -1,17 +1,8 @@
+import builtins
 import collections.abc
 import re
 from datetime import datetime
-from typing import (
-    TYPE_CHECKING,
-    Any,
-    AnyStr,
-    Dict,
-    Mapping,
-    Optional,
-    Pattern,
-    Tuple,
-    Union,
-)
+from typing import TYPE_CHECKING, Any, AnyStr, Pattern, Tuple, Union
 
 if TYPE_CHECKING:
     from _pytest.python_api import ApproxBase
@@ -54,13 +45,10 @@ class any:  # pylint: disable=redefined-builtin
         return True
 
 
-class _dict(dict):
+class dict(
+    builtins.dict  # type: ignore[type-arg]
+):  # pylint: disable=redefined-builtin
     """Special class to eq by matching only presented dict keys"""
-
-    def __init__(self, d: Optional[Mapping[Any, Any]] = None, **keys: Any) -> None:
-        if d:
-            self.update(d)
-        self.update(keys)
 
     def __repr__(self) -> str:
         inner = ", ".join(f"{k}={repr(v)}" for k, v in self.items())
@@ -167,6 +155,7 @@ class Matcher(attrs):
     """
 
     any = any()
+    dict = dict
 
     @staticmethod
     def attrs(**attribs: Any) -> attrs:
@@ -180,10 +169,6 @@ class Matcher(attrs):
         return regex(pattern, flags=flags)
 
     re = regex
-
-    @staticmethod
-    def dict(d: Optional[Mapping[Any, Any]] = None, **keys: Any) -> dict:
-        return _dict(d=d, **keys)
 
     @staticmethod
     def unordered(*items: Any) -> unordered:
