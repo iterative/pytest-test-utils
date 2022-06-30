@@ -54,24 +54,21 @@ class any:  # pylint: disable=redefined-builtin
         return True
 
 
-class dict:  # pylint: disable=redefined-builtin
+class _dict(dict):
     """Special class to eq by matching only presented dict keys"""
 
-    def __init__(
-        self, d: Optional[Mapping[Any, Any]] = None, **keys: Any
-    ) -> None:
-        self.d: Dict[Any, Any] = {}
+    def __init__(self, d: Optional[Mapping[Any, Any]] = None, **keys: Any) -> None:
         if d:
-            self.d.update(d)
-        self.d.update(keys)
+            self.update(d)
+        self.update(keys)
 
     def __repr__(self) -> str:
-        inner = ", ".join(f"{k}={repr(v)}" for k, v in self.d.items())
+        inner = ", ".join(f"{k}={repr(v)}" for k, v in self.items())
         return f"dict({inner})"
 
     def __eq__(self, other: object) -> bool:
         assert isinstance(other, collections.abc.Mapping)
-        return all(other.get(name) == v for name, v in self.d.items())
+        return all(other.get(name) == v for name, v in self.items())
 
 
 class unordered:
@@ -186,7 +183,7 @@ class Matcher(attrs):
 
     @staticmethod
     def dict(d: Optional[Mapping[Any, Any]] = None, **keys: Any) -> dict:
-        return dict(d=d, **keys)
+        return _dict(d=d, **keys)
 
     @staticmethod
     def unordered(*items: Any) -> unordered:
