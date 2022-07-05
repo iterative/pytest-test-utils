@@ -109,8 +109,8 @@ def test_matcher_repr(matcher: Type[Matcher]) -> None:
     assert repr(matcher.attrs(foo="foo")) == "attrs(foo='foo')"
     assert repr(matcher.any_of(3, 4)) == "any_of(3, 4)"
     assert (
-        repr(matcher.dict(foo="foo", **{"bar": "bar"}))
-        == "dict(foo='foo', bar='bar')"
+        repr(matcher.dict(foo="foo", **{"n": 123}))  # type: ignore[arg-type]
+        == "M.dict(foo='foo', n=123)"
     )
     assert repr(matcher.instance_of(str)) == "instance_of(str)"
     assert (
@@ -130,6 +130,14 @@ def test_matcher_dict(matcher: Type[Matcher]) -> None:
     assert actual == matcher.dict(verify="bundle", timeout=10)
     assert actual == matcher.dict(actual, verify="bundle")
     assert actual != matcher.dict(verify="bundle.pem")
+
+
+def test_matcher_dict_subclass(matcher: Type[Matcher]) -> None:
+    class SubDict(dict):  # type: ignore[type-arg]
+        pass
+
+    assert SubDict(a=1) == matcher.dict()
+    assert matcher.dict() == SubDict(a=1)
 
 
 def test_matcher_regex(matcher: Type[Matcher]) -> None:
