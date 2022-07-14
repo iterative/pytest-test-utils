@@ -1,8 +1,17 @@
-import builtins
 import collections.abc
 import re
 from datetime import datetime
-from typing import TYPE_CHECKING, Any, AnyStr, Pattern, Tuple, Union
+from typing import (
+    TYPE_CHECKING,
+    Any,
+    AnyStr,
+    Dict,
+    Mapping,
+    Optional,
+    Pattern,
+    Tuple,
+    Union,
+)
 
 if TYPE_CHECKING:
     from _pytest.python_api import ApproxBase
@@ -45,18 +54,33 @@ class any:  # pylint: disable=redefined-builtin
         return True
 
 
-class dict(
-    builtins.dict  # type: ignore[type-arg]
-):  # pylint: disable=redefined-builtin
+class MatcherDict:
     """Special class to eq by matching only presented dict keys"""
 
+    # Implementation notes:
+    # - can't inherit from dict because that makes D() == M.dict() to not call
+    #   our __eq__, if D is a subclass of a dict
+    # - should not call itself dict or use dict in repr because it creates
+    #   confusing error messages (shadowing python builtins is bad anyway)
+
+    def __init__(
+        self, d: Optional[Mapping[Any, Any]] = None, **keys: Any
+    ) -> None:
+        self.d: Dict[Any, Any] = {}
+        if d:
+            self.d.update(d)
+        self.d.update(keys)
+
+    def __len__(self) -> int:
+        return len(self.d)
+
     def __repr__(self) -> str:
-        inner = ", ".join(f"{k}={repr(v)}" for k, v in self.items())
-        return f"dict({inner})"
+        inner = ", ".join(f"{k}={repr(v)}" for k, v in self.d.items())
+        return f"M.dict({inner})"
 
     def __eq__(self, other: object) -> bool:
         assert isinstance(other, collections.abc.Mapping)
-        return all(other.get(name) == v for name, v in self.items())
+        return all(other.get(name) == v for name, v in self.d.items())
 
 
 class unordered:
@@ -155,7 +179,7 @@ class Matcher(attrs):
     """
 
     any = any()
-    dict = dict
+    dict = MatcherDict
 
     @staticmethod
     def attrs(**attribs: Any) -> attrs:
