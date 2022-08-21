@@ -13,7 +13,6 @@ jobs:
         python-version: '3.10'
     - run: pip install -U nox
     - run: nox -s build
-    - uses: pypa/gh-action-pypi-publish@master
+    - uses: pypa/gh-action-pypi-publish@release/v1
       with:
-        user: __token__
         password: ${{ secrets.PYPI_TOKEN }}
