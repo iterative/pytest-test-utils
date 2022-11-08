@@ -50,3 +50,6 @@ disable = ["missing-function-docstring", "missing-module-docstring", "missing-cl
 
 [tool.pytest.ini_options]
 testpaths = ["tests.py"]
+
+[tool.codespell]
+ignore-words-list = "cachable"
