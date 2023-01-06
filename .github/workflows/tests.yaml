@@ -3,15 +3,18 @@ on: push
 jobs:
   tests:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        python-version: ['3.7', '3.8', '3.9', '3.10']
-    name: Python ${{ matrix.python-version }}
     steps:
     - uses: actions/checkout@v3
     - uses: actions/setup-python@v4
       with:
-        python-version: ${{ matrix.python-version }}
+        python-version: |
+          3.8
+          3.9
+          3.10
+          3.11
+          pypy3.8
+          pypy3.9
+          3.7
     - run: pip install -U nox
     - run: nox
     - run: nox -s build
