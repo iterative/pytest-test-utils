@@ -4,6 +4,10 @@ on:
     types: [published]
 jobs:
   release:
+    environment: pypi
+    permissions:
+      contents: read
+      id-token: write
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
@@ -14,5 +18,3 @@ jobs:
     - run: pip install -U nox
     - run: nox -s build
     - uses: pypa/gh-action-pypi-publish@release/v1
-      with:
-        password: ${{ secrets.PYPI_TOKEN }}
