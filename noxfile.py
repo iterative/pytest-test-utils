@@ -11,7 +11,7 @@ locations = "pytest_test_utils", "tests.py"
 
 
 @nox.session(
-    python=["3.7", "3.8", "3.9", "3.10", "3.11", "pypy3.8", "pypy3.9"]
+    python=["3.7", "3.8", "3.9", "3.10", "3.11", "3.12", "pypy3.8", "pypy3.9"]
 )
 def tests(session: nox.Session) -> None:
     session.install(".[tests]")
@@ -22,7 +22,7 @@ def tests(session: nox.Session) -> None:
 
 
 @nox.session(python=["3.7", "3.8"])
-@nox.parametrize("pytest", ["3.9.1", "4.0", "5.0", "6.0"])
+@nox.parametrize("pytest", ["3.9.1", "4.0", "5.0", "6.0", "7.0"])
 def compat(session: nox.Session, pytest: str) -> None:
     session.install(".[tests]")
     session.install(f"pytest=={pytest}")
