@@ -5,17 +5,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
-    - uses: actions/setup-python@v4
+    - uses: wntrblm/nox@2023.04.22
       with:
-        python-version: |
-          3.8
-          3.9
-          3.10
-          3.11
-          3.12
-          pypy3.8
-          pypy3.9
-          3.7
-    - run: pip install -U nox
+        python-versions: "3.7, 3.8, 3.9, 3.10, 3.11, 3.12"
     - run: nox
     - run: nox -s build

@@ -64,9 +64,7 @@ def test_gen_dict_bytes(tmp_dir: TmpDir) -> None:
     ]
     assert (tmp_dir / os.fsdecode("file")).read_bytes() == b"lorem"
     assert (tmp_dir / os.fsdecode("dir")).is_dir()
-    assert (
-        tmp_dir / os.fsdecode("dir") / os.fsdecode("file")
-    ).read_bytes() == b"ipsum"
+    assert (tmp_dir / os.fsdecode("dir") / os.fsdecode("file")).read_bytes() == b"ipsum"
 
 
 def test_chdir(tmp_path: Path, tmp_dir: TmpDir) -> None:
@@ -113,13 +111,9 @@ def test_matcher_repr(matcher: Type[Matcher]) -> None:
         == "M.dict(foo='foo', n=123)"
     )
     assert repr(matcher.instance_of(str)) == "instance_of(str)"
-    assert (
-        repr(matcher.instance_of((str, bytes))) == "instance_of((str, bytes))"
-    )
+    assert repr(matcher.instance_of((str, bytes))) == "instance_of((str, bytes))"
     assert repr(matcher.unordered("foo", "bar")) == "unordered('foo', 'bar')"
-    assert (
-        repr(matcher.re(r"^plots\.csv-\w+$")) == "regex(r'^plots\\.csv-\\w+$')"
-    )
+    assert repr(matcher.re(r"^plots\.csv-\w+$")) == "regex(r'^plots\\.csv-\\w+$')"
 
 
 def test_matcher_dict(matcher: Type[Matcher]) -> None:
@@ -152,9 +146,7 @@ def test_matcher_attrs(matcher: Type[Matcher]) -> None:
 
 
 def test_matcher_attrs_nested(matcher: Type[Matcher]) -> None:
-    obj = SimpleNamespace(
-        nested=SimpleNamespace(foo="foo", bar="bar"), foobar="bar"
-    )
+    obj = SimpleNamespace(nested=SimpleNamespace(foo="foo", bar="bar"), foobar="bar")
     assert obj == matcher.attrs(nested=matcher.attrs(foo="foo"))
 
 

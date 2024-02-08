@@ -21,9 +21,7 @@ class approx_datetime(ApproxBase):  # pylint: disable=abstract-method
         """Initialize the approx_datetime with `abs` as tolerance."""
         assert isinstance(expected, datetime)
         abs = abs or self.default_tolerance
-        assert abs >= timedelta(
-            0
-        ), f"absolute tolerance can't be negative: {abs}"
+        assert abs >= timedelta(0), f"absolute tolerance can't be negative: {abs}"
         super().__init__(expected, abs=abs)
 
     def __repr__(self) -> str:  # pragma: no cover

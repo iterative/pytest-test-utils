@@ -1,30 +1,64 @@
 [build-system]
-requires = ["setuptools>=48", "setuptools_scm[toml]>=6.3.1"]
 build-backend = "setuptools.build_meta"
+requires = [
+  "setuptools>=48",
+  "setuptools_scm[toml]>=6.3.1",
+]
+
+[project]
+name = "pytest-test-utils"
+readme = "README.md"
+license = { text = "Apache License 2.0" }
+authors = [{ name = "Saugat Pachhai", email = "support@dvc.org" }]
+requires-python = ">=3.7"
+classifiers = [
+  "Framework :: Pytest",
+  "Programming Language :: Python :: 3 :: Only",
+  "Programming Language :: Python :: 3.7",
+  "Programming Language :: Python :: 3.8",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+]
+dynamic = [
+  "version",
+]
+dependencies = [
+  "pytest>=3.9",
+]
+[project.optional-dependencies]
+dev = [
+  "mypy",
+  "pytest-test-utils[tests]",
+]
+tests = [
+  "coverage>=6",
+]
+[project.urls]
+Issues = "https://github.com/iterative/pytest-test-utils/issues"
+Source = "https://github.com/iterative/pytest-test-utils"
+[project.entry-points.pytest11]
+pytest_test_utils = "pytest_test_utils.pytest_plugin"
+
+[tool.setuptools.package-data]
+pytest_test_utils = ["py.typed"]
 
 [tool.setuptools_scm]
 
-[tool.black]
-line-length = 79
-include = '\.pyi?$'
-exclude = '''
-/(
-    \.eggs
-  | \.git
-  | \.hg
-  | \.mypy_cache
-  | \.tox
-  | \.venv
-  | _build
-  | buck-out
-  | build
-  | dist
-)/
-'''
+[tool.ruff]
+output-format = "full"
+show-fixes = true
 
-[tool.isort]
-profile = "black"
-line_length = 79
+[tool.ruff.lint]
+ignore = ["S101"]
+extend-select = ["S", "I", "B", "C4", "T10"]
+
+[tool.codespell]
+ignore-words-list = "cachable"
+
+[tool.pytest.ini_options]
+testpaths = ["tests.py"]
 
 [tool.mypy]
 # Error output
@@ -43,13 +77,3 @@ files = ["pytest_test_utils", "tests.py"]
 [[tool.mypy.overrides]]
 module = ["tests"]
 strict_equality = false
-
-[tool.pylint.message_control]
-enable = ["no-else-return"]
-disable = ["missing-function-docstring", "missing-module-docstring", "missing-class-docstring"]
-
-[tool.pytest.ini_options]
-testpaths = ["tests.py"]
-
-[tool.codespell]
-ignore-words-list = "cachable"
