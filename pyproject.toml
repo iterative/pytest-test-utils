@@ -60,6 +60,25 @@ ignore-words-list = "cachable"
 [tool.pytest.ini_options]
 testpaths = ["tests.py"]
 
+[tool.coverage.run]
+branch = true
+source = ["pytest_test_utils"]
+
+[tool.coverage.paths]
+source = ["dvc"]
+
+[tool.coverage.report]
+exclude_lines = [
+    "if __name__ == .__main__.:",
+    "if TYPE_CHECKING:",
+    "if typing.TYPE_CHECKING:",
+    "@overload",
+    "pragma: no cover",
+    "raise AssertionError",
+    "raise NotImplementedError",
+]
+show_missing = true
+
 [tool.mypy]
 # Error output
 show_column_numbers = true
