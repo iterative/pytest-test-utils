@@ -28,9 +28,7 @@ class regex:
         pattern: Union[AnyStr, Pattern[AnyStr]],
         flags: Union[int, re.RegexFlag] = 0,
     ) -> None:
-        self._regex: Pattern[AnyStr] = re.compile(
-            pattern, flags  # type: ignore[arg-type]
-        )
+        self._regex: Pattern[AnyStr] = re.compile(pattern, flags)  # type: ignore[arg-type]
 
     def __repr__(self) -> str:
         flags = self._regex.flags & ~32  # 32 is default
@@ -63,9 +61,7 @@ class MatcherDict:
     # - should not call itself dict or use dict in repr because it creates
     #   confusing error messages (shadowing python builtins is bad anyway)
 
-    def __init__(
-        self, d: Optional[Mapping[Any, Any]] = None, **keys: Any
-    ) -> None:
+    def __init__(self, d: Optional[Mapping[Any, Any]] = None, **keys: Any) -> None:
         self.d: Dict[Any, Any] = {}
         if d:
             self.d.update(d)
@@ -112,9 +108,7 @@ class attrs:
     def __eq__(self, other: Any) -> bool:
         # Unforturnately this doesn't work with classes with slots
         # self.__class__ = other.__class__
-        return all(
-            getattr(other, name) == v for name, v in self.attribs.items()
-        )
+        return all(getattr(other, name) == v for name, v in self.attribs.items())
 
 
 class any_of:

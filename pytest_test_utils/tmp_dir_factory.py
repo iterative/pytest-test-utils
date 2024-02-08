@@ -11,9 +11,7 @@ class TempDirFactory:
         self.tmp_path_factory: "TempPathFactory" = tmp_path_factory
 
     def mktemp(self, basename: str, numbered: bool = True) -> TmpDir:
-        return TmpDir(
-            self.tmp_path_factory.mktemp(basename, numbered=numbered)
-        )
+        return TmpDir(self.tmp_path_factory.mktemp(basename, numbered=numbered))
 
     def getbasetemp(self) -> TmpDir:
         return TmpDir(self.tmp_path_factory.getbasetemp())
