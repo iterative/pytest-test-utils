@@ -4,7 +4,7 @@ from pathlib import Path
 from typing import Iterator
 
 
-class TmpDir(type(Path())):  # type: ignore
+class TmpDir(type(Path())):
     def gen(self, struct, text=""):
         if isinstance(struct, (str, bytes, os.PathLike)):
             struct = {struct: text}

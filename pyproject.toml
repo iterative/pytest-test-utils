@@ -29,7 +29,7 @@ dependencies = [
 ]
 [project.optional-dependencies]
 dev = [
-  "mypy",
+  "mypy==1.8",
   "pytest-test-utils[tests]",
 ]
 tests = [

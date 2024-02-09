@@ -3,7 +3,7 @@ from datetime import datetime, timedelta
 from pathlib import Path
 from time import perf_counter
 from types import SimpleNamespace
-from typing import TYPE_CHECKING, Type
+from typing import Type
 from unittest.mock import MagicMock
 
 import pytest
@@ -12,11 +12,6 @@ from pytest_test_utils import TmpDir, matchers
 from pytest_test_utils.matchers import Matcher
 from pytest_test_utils.tmp_dir_factory import TempDirFactory
 from pytest_test_utils.waiters import TimedOutError, wait_until
-
-if TYPE_CHECKING:
-    from pytest import TempPathFactory
-
-# pylint: disable=redefined-outer-name
 
 
 def test_is_tmp_dir(tmp_dir: TmpDir) -> None:
@@ -85,7 +80,7 @@ def test_cat(tmp_dir: TmpDir) -> None:
 
 
 def test_tmp_dir_factory(
-    tmp_path_factory: "TempPathFactory", tmp_dir_factory: TempDirFactory
+    tmp_path_factory: "pytest.TempPathFactory", tmp_dir_factory: TempDirFactory
 ) -> None:
     assert isinstance(tmp_dir_factory, TempDirFactory)
     tmp_dir = tmp_dir_factory.mktemp("test-dir")
@@ -106,10 +101,7 @@ def test_matcher_repr(matcher: Type[Matcher]) -> None:
     assert repr(matcher.any) == "any"
     assert repr(matcher.attrs(foo="foo")) == "attrs(foo='foo')"
     assert repr(matcher.any_of(3, 4)) == "any_of(3, 4)"
-    assert (
-        repr(matcher.dict(foo="foo", **{"n": 123}))  # type: ignore[arg-type]
-        == "M.dict(foo='foo', n=123)"
-    )
+    assert repr(matcher.dict(foo="foo", **{"n": 123})) == "M.dict(foo='foo', n=123)"
     assert repr(matcher.instance_of(str)) == "instance_of(str)"
     assert repr(matcher.instance_of((str, bytes))) == "instance_of((str, bytes))"
     assert repr(matcher.unordered("foo", "bar")) == "unordered('foo', 'bar')"
@@ -266,9 +258,7 @@ def test_matcher_as_attrs(matcher: Type[Matcher]) -> None:
     assert obj != matcher(bar="b")
 
 
-def test_matcher_alias(  # pylint: disable=invalid-name
-    M: Type[Matcher], matcher: Type[Matcher]
-) -> None:
+def test_matcher_alias(M: Type[Matcher], matcher: Type[Matcher]) -> None:
     assert matcher is M is Matcher
 
 

@@ -3,21 +3,15 @@ from typing import Optional
 
 from _pytest.python_api import ApproxBase
 
-# pylint: disable=invalid-name
 
-
-class approx_datetime(ApproxBase):  # pylint: disable=abstract-method
+class approx_datetime(ApproxBase):
     """Perform approximate comparisons between datetime or timedelta."""
 
     default_tolerance = timedelta(seconds=1)
     expected: datetime
     abs: timedelta
 
-    def __init__(
-        self,
-        expected: datetime,
-        abs: Optional[timedelta] = None,  # pylint: disable=redefined-builtin
-    ) -> None:
+    def __init__(self, expected: datetime, abs: Optional[timedelta] = None) -> None:
         """Initialize the approx_datetime with `abs` as tolerance."""
         assert isinstance(expected, datetime)
         abs = abs or self.default_tolerance

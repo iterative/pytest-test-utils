@@ -5,9 +5,6 @@ from typing import (
     TYPE_CHECKING,
     Any,
     AnyStr,
-    Dict,
-    Mapping,
-    Optional,
     Pattern,
     Tuple,
     Union,
@@ -15,9 +12,6 @@ from typing import (
 
 if TYPE_CHECKING:
     from _pytest.python_api import ApproxBase
-
-
-# pylint: disable=invalid-name, too-few-public-methods
 
 
 class regex:
@@ -37,10 +31,10 @@ class regex:
 
     def __eq__(self, other: Any) -> bool:
         assert isinstance(other, (str, bytes))
-        return bool(self._regex.search(other))  # type: ignore
+        return bool(self._regex.search(other))  # type: ignore[arg-type]
 
 
-class any:  # pylint: disable=redefined-builtin
+class any:
     """Equals to anything.
 
     A way to ignore parts of data structures on comparison"""
@@ -61,11 +55,8 @@ class MatcherDict:
     # - should not call itself dict or use dict in repr because it creates
     #   confusing error messages (shadowing python builtins is bad anyway)
 
-    def __init__(self, d: Optional[Mapping[Any, Any]] = None, **keys: Any) -> None:
-        self.d: Dict[Any, Any] = {}
-        if d:
-            self.d.update(d)
-        self.d.update(keys)
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        self.d = dict(*args, **kwargs)
 
     def __len__(self) -> int:
         return len(self.d)
@@ -124,10 +115,7 @@ class any_of:
 
 
 class instance_of:
-    def __init__(
-        self,
-        expected_type: Union[Any, Tuple[Any, ...]],
-    ) -> None:
+    def __init__(self, expected_type: Union[Any, Tuple[Any, ...]]) -> None:
         self.expected_type = expected_type
 
     def __repr__(self) -> str:
@@ -141,14 +129,7 @@ class instance_of:
         return isinstance(other, self.expected_type)
 
 
-def approx(  # type: ignore[no-untyped-def]
-    expected,
-    rel=None,
-    abs=None,  # pylint: disable=redefined-builtin
-    nan_ok: bool = False,
-) -> "ApproxBase":
-    # pylint: disable=import-outside-toplevel
-
+def approx(expected, rel=None, abs=None, nan_ok: bool = False) -> "ApproxBase":  # type: ignore[no-untyped-def]
     if isinstance(expected, datetime):
         from ._approx import approx_datetime
 
@@ -201,10 +182,5 @@ class Matcher(attrs):
         return instance_of(expected_type)
 
     @staticmethod
-    def approx(  # type: ignore[no-untyped-def]
-        expected,
-        rel=None,
-        abs=None,  # pylint: disable=redefined-builtin
-        nan_ok: bool = False,
-    ) -> "ApproxBase":
+    def approx(expected, rel=None, abs=None, nan_ok: bool = False) -> "ApproxBase":  # type: ignore[no-untyped-def]
         return approx(expected, rel=rel, abs=abs, nan_ok=nan_ok)
