@@ -2,14 +2,16 @@
 build-backend = "setuptools.build_meta"
 requires = [
   "setuptools>=48",
-  "setuptools_scm[toml]>=6.3.1",
+  "setuptools-scm[toml]>=6.3.1",
 ]
 
 [project]
 name = "pytest-test-utils"
 readme = "README.md"
 license = { text = "Apache License 2.0" }
-authors = [{ name = "Saugat Pachhai", email = "support@dvc.org" }]
+authors = [
+  { name = "Saugat Pachhai", email = "support@dvc.org" },
+]
 requires-python = ">=3.7"
 classifiers = [
   "Framework :: Pytest",
@@ -27,55 +29,67 @@ dynamic = [
 dependencies = [
   "pytest>=3.9",
 ]
-[project.optional-dependencies]
-dev = [
+optional-dependencies.dev = [
   "mypy==1.8",
   "pytest-test-utils[tests]",
 ]
-tests = [
+optional-dependencies.tests = [
   "coverage>=6",
 ]
-[project.urls]
-Issues = "https://github.com/iterative/pytest-test-utils/issues"
-Source = "https://github.com/iterative/pytest-test-utils"
-[project.entry-points.pytest11]
-pytest_test_utils = "pytest_test_utils.pytest_plugin"
+urls.Issues = "https://github.com/iterative/pytest-test-utils/issues"
+urls.Source = "https://github.com/iterative/pytest-test-utils"
+entry-points.pytest11.pytest_test_utils = "pytest_test_utils.pytest_plugin"
 
 [tool.setuptools.package-data]
-pytest_test_utils = ["py.typed"]
+pytest_test_utils = [
+  "py.typed",
+]
 
 [tool.setuptools_scm]
 
 [tool.ruff]
-output-format = "full"
 show-fixes = true
 
-[tool.ruff.lint]
-ignore = ["S101"]
-extend-select = ["S", "I", "B", "C4", "T10"]
+output-format = "full"
+lint.extend-select = [
+  "B",
+  "C4",
+  "I",
+  "S",
+  "T10",
+]
+lint.ignore = [
+  "S101",
+]
 
 [tool.codespell]
 ignore-words-list = "cachable"
 
 [tool.pytest.ini_options]
-testpaths = ["tests.py"]
+testpaths = [
+  "tests.py",
+]
 
 [tool.coverage.run]
 branch = true
-source = ["pytest_test_utils"]
+source = [
+  "pytest_test_utils",
+]
 
 [tool.coverage.paths]
-source = ["dvc"]
+source = [
+  "dvc",
+]
 
 [tool.coverage.report]
 exclude_lines = [
-    "if __name__ == .__main__.:",
-    "if TYPE_CHECKING:",
-    "if typing.TYPE_CHECKING:",
-    "@overload",
-    "pragma: no cover",
-    "raise AssertionError",
-    "raise NotImplementedError",
+  "if __name__ == .__main__.:",
+  "if TYPE_CHECKING:",
+  "if typing.TYPE_CHECKING:",
+  "@overload",
+  "pragma: no cover",
+  "raise AssertionError",
+  "raise NotImplementedError",
 ]
 show_missing = true
 
@@ -91,8 +105,13 @@ strict = true
 warn_no_return = true
 warn_redundant_casts = true
 warn_unreachable = true
-files = ["pytest_test_utils", "tests.py"]
+files = [
+  "pytest_test_utils",
+  "tests.py",
+]
 
 [[tool.mypy.overrides]]
-module = ["tests"]
+module = [
+  "tests",
+]
 strict_equality = false
