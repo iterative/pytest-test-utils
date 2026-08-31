@@ -29,7 +29,7 @@ class regex:
         flags_repr = f", {flags}" if flags else ""
         return f"regex(r'{self._regex.pattern!s}'{flags_repr})"
 
-    def __eq__(self, other: Any) -> bool:
+    def __eq__(self, other: object) -> bool:
         assert isinstance(other, (str, bytes))
         return bool(self._regex.search(other))  # type: ignore[arg-type]
 
@@ -42,7 +42,7 @@ class any:
     def __repr__(self) -> str:
         return "any"
 
-    def __eq__(self, other: Any) -> bool:
+    def __eq__(self, other: object) -> bool:
         return True
 
 
@@ -62,7 +62,7 @@ class MatcherDict:
         return len(self.d)
 
     def __repr__(self) -> str:
-        inner = ", ".join(f"{k}={repr(v)}" for k, v in self.d.items())
+        inner = ", ".join(f"{k}={v!r}" for k, v in self.d.items())
         return f"M.dict({inner})"
 
     def __eq__(self, other: object) -> bool:
@@ -93,10 +93,10 @@ class attrs:
         self.attribs = attribs
 
     def __repr__(self) -> str:
-        inner = ", ".join(f"{k}={repr(v)}" for k, v in self.attribs.items())
+        inner = ", ".join(f"{k}={v!r}" for k, v in self.attribs.items())
         return f"attrs({inner})"
 
-    def __eq__(self, other: Any) -> bool:
+    def __eq__(self, other: object) -> bool:
         # Unforturnately this doesn't work with classes with slots
         # self.__class__ = other.__class__
         return all(getattr(other, name) == v for name, v in self.attribs.items())
@@ -125,7 +125,7 @@ class instance_of:
             inner = self.expected_type.__name__
         return f"{self.__class__.__name__}({inner})"
 
-    def __eq__(self, other: Any) -> bool:
+    def __eq__(self, other: object) -> bool:
         return isinstance(other, self.expected_type)
 
 
