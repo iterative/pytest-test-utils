@@ -101,7 +101,7 @@ def test_matcher_repr(matcher: Type[Matcher]) -> None:
     assert repr(matcher.any) == "any"
     assert repr(matcher.attrs(foo="foo")) == "attrs(foo='foo')"
     assert repr(matcher.any_of(3, 4)) == "any_of(3, 4)"
-    assert repr(matcher.dict(foo="foo", **{"n": 123})) == "M.dict(foo='foo', n=123)"
+    assert repr(matcher.dict(foo="foo", n=123)) == "M.dict(foo='foo', n=123)"
     assert repr(matcher.instance_of(str)) == "instance_of(str)"
     assert repr(matcher.instance_of((str, bytes))) == "instance_of((str, bytes))"
     assert repr(matcher.unordered("foo", "bar")) == "unordered('foo', 'bar')"
