@@ -41,8 +41,8 @@ urls.Issues = "https://github.com/iterative/pytest-test-utils/issues"
 urls.Source = "https://github.com/iterative/pytest-test-utils"
 entry-points.pytest11.pytest_test_utils = "pytest_test_utils.pytest_plugin"
 
-[tool.setuptools.package-data]
-pytest_test_utils = [
+[tool.setuptools]
+package-data.pytest_test_utils = [
   "py.typed",
 ]
 
@@ -50,7 +50,6 @@ pytest_test_utils = [
 
 [tool.ruff]
 show-fixes = true
-
 output-format = "full"
 lint.extend-select = [
   "B",
@@ -66,53 +65,49 @@ lint.ignore = [
 [tool.codespell]
 ignore-words-list = "cachable"
 
-[tool.pytest.ini_options]
-testpaths = [
-  "tests.py",
-]
-
-[tool.coverage.run]
-branch = true
-source = [
-  "pytest_test_utils",
-]
-
-[tool.coverage.paths]
-source = [
-  "dvc",
-]
-
-[tool.coverage.report]
-exclude_lines = [
-  "if __name__ == .__main__.:",
-  "if TYPE_CHECKING:",
-  "if typing.TYPE_CHECKING:",
-  "@overload",
-  "pragma: no cover",
-  "raise AssertionError",
-  "raise NotImplementedError",
-]
-show_missing = true
-
 [tool.mypy]
-# Error output
-show_column_numbers = true
-show_error_codes = true
-show_error_context = true
-show_traceback = true
-pretty = true
-check_untyped_defs = true
-strict = true
-warn_no_return = true
-warn_redundant_casts = true
-warn_unreachable = true
 files = [
   "pytest_test_utils",
   "tests.py",
 ]
+check_untyped_defs = true
+warn_redundant_casts = true
+warn_no_return = true
+warn_unreachable = true
+strict = true
+show_error_context = true
+# Error output
+show_column_numbers = true
+pretty = true
+show_traceback = true
+show_error_codes = true
 
 [[tool.mypy.overrides]]
 module = [
   "tests",
 ]
 strict_equality = false
+
+[tool.pytest]
+ini_options.testpaths = [
+  "tests.py",
+]
+
+[tool.coverage]
+run.source = [
+  "pytest_test_utils",
+]
+run.branch = true
+paths.source = [
+  "dvc",
+]
+report.exclude_lines = [
+  "@overload",
+  "if __name__ == .__main__.:",
+  "if TYPE_CHECKING:",
+  "if typing.TYPE_CHECKING:",
+  "pragma: no cover",
+  "raise AssertionError",
+  "raise NotImplementedError",
+]
+report.show_missing = true
