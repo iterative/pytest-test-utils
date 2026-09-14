@@ -2,14 +2,16 @@ import os
 from pathlib import Path
 from typing import Any, ContextManager, Dict, List, TypeVar, Union, overload
 
-T = TypeVar("T", str, bytes)
-Text = Union[str, bytes]
-AnyPath = Union[T, os.PathLike[T]]
-AnyStruct = Dict[AnyPath[T], Union[Text, Dict[AnyPath[T], Any]]]
-StrStruct = AnyStruct[str]
-BytesStruct = AnyStruct[bytes]
+from typing_extensions import TypeAlias
 
-CatStruct = Union[str, Dict[str, Union[str, Dict[str, Any]]]]
+T = TypeVar("T", str, bytes)
+Text: TypeAlias = Union[str, bytes]
+AnyPath: TypeAlias = Union[T, os.PathLike[T]]
+AnyStruct: TypeAlias = Dict[AnyPath[T], Union[Text, Dict[AnyPath[T], Any]]]
+StrStruct: TypeAlias = AnyStruct[str]
+BytesStruct: TypeAlias = AnyStruct[bytes]
+
+CatStruct: TypeAlias = Union[str, Dict[str, Union[str, Dict[str, Any]]]]
 
 class TmpDir(Path):
     @overload
